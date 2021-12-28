@@ -341,8 +341,7 @@ func (this *Client) VerifySign(data url.Values) (ok bool, err error) {
 	if err != nil {
 		return false, err
 	}
-
-	return verifySign(data, publicKey)
+	return VerifySign(data, publicKey)
 }
 
 func (this *Client) getAliPayPublicKey(certSN string) (key *rsa.PublicKey, err error) {
@@ -468,10 +467,10 @@ func signWithPKCS1v15(param url.Values, privateKey *rsa.PrivateKey, hash crypto.
 	return s, nil
 }
 
-func verifySign(data url.Values, key *rsa.PublicKey) (ok bool, err error) {
+func VerifySign(data url.Values, key *rsa.PublicKey) (ok bool, err error) {
 	sign := data.Get(kSignNodeName)
 
-	var keys = make([]string, 0, 0)
+	var keys = []string{}
 	for k := range data {
 		if k == kSignNodeName || k == kSignTypeNodeName || k == kCertSNNodeName {
 			continue
